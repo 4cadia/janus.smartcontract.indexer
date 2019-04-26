@@ -30,26 +30,35 @@ contract Indexer{
         emit addWebSiteEvent(_tag);
     }
 
-    function getWebSite(string memory _tag) 
+    function  getWebSite(string memory _tag) 
         public 
         view 
-        returns(string[] memory, string[] memory, string[] memory, string[] memory){
-        
-        string[] memory storageHashs;
-        string[] memory tags;
-        string[] memory titles;
-        string[] memory descriptions;
-
+        returns(string memory website){
+      
         WebSite[] storage webSites = websites[_tag];
-        
-        for(uint i = 0; i < webSites.length; i++){
-            WebSite storage site = webSites[i];
-            storageHashs[i] = site.storageHash;
-            tags[i] = site.tag;
-            titles[i] = site.title;
-            descriptions[i] = site.description;
-        }
 
-        return (storageHashs, tags, titles, descriptions);
+        string memory result = strConcat("teste1","teste2","teste3","teste4");
+
+        return (result);
+    }   
+
+    function strConcat(string memory _a, string memory _b, string memory _c, string memory _d) private pure returns (string memory){
+        bytes memory _ba = bytes(_a);
+        bytes memory _bb = bytes(_b);
+        bytes memory _bc = bytes(_c);
+        bytes memory _bd = bytes(_d);
+        bytes memory _v = bytes(",");
+
+        string memory abcd = new string(_ba.length + _v.length + _bb.length + _v.length + _bc.length  + _v.length + _bd.length);
+        bytes memory babcd = bytes(abcd);
+        uint k = 0;
+        for (uint i = 0; i < _ba.length; i++) babcd[k++] = _ba[i];   
+        babcd[k++] = _v[0];
+        for (uint i = 0; i < _bb.length; i++) babcd[k++] = _bb[i];
+        babcd[k++] = _v[0];
+        for (uint i = 0; i < _bc.length; i++) babcd[k++] = _bc[i];
+        babcd[k++] = _v[0];
+        for (uint i = 0; i < _bd.length; i++) babcd[k++] = _bd[i];
+        return string(babcd);
     }
 }

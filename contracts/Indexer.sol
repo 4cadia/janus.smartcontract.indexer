@@ -30,7 +30,7 @@ contract Indexer{
         emit addWebSiteEvent(_tag);
     }
 
-    function getWebSite(string memory _tag) 
+    function  getWebSite(string memory _tag) 
         public 
         view 
         returns(string memory){

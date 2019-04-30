@@ -43,8 +43,9 @@ contract Indexer{
     function getWebSite(string[] memory _tags) 
         public 
         view 
-        returns(string memory website){
+        returns(string memory){
       
+<<<<<<< HEAD
         string memory result;
 
         for(uint a = 0; a < _tags.length; a++){
@@ -71,13 +72,43 @@ contract Indexer{
     }
 
    function concat(string memory _a, string memory _b, string memory _c, string memory _d) public pure returns (string memory){
+=======
+            WebSite[] storage webSites = websites[_tag];
+            
+            string memory result;
+
+            for(uint i = 0; i < webSites.length; i++){
+                WebSite storage site = webSites[i];
+
+                if (i == 0) {
+                    string memory resultConcat = strConcat("", site.storageHash, site.tag, site.title, site.description);  
+                    uint resultLenght = getStringLength(resultConcat);
+                    string memory resultSlice = getSlice(2, resultLenght, resultConcat);
+                    result = resultSlice;
+                } else {
+                    uint resultLenght = getStringLength(result);
+                    string memory resultSlice = getSlice(1, resultLenght, result);
+                    result = strConcat(resultSlice, site.storageHash, site.tag, site.title, site.description);   
+                }            
+            }
+
+            return (result);
+    }   
+  
+    function strConcat(string memory _a, string memory _b, string memory _c, string memory _d, string memory _e) private pure returns (string memory){
+>>>>>>> f7b9704d579debc7fe1b10821676e2cdf01e4487
         bytes memory _ba = bytes(_a);
         bytes memory _bb = bytes(_b);
         bytes memory _bc = bytes(_c);
         bytes memory _bd = bytes(_d);
+        bytes memory _be = bytes(_e);
         bytes memory _v = bytes(",");
 
+<<<<<<< HEAD
         string memory abcd = new string(_ba.length + _v.length + _bb.length + _v.length + _bc.length  + _v.length + _bd.length);   
+=======
+        string memory abcd = new string(_ba.length + _v.length + _bb.length + _v.length + _bc.length  + _v.length + _bd.length + _v.length + _be.length);   
+>>>>>>> f7b9704d579debc7fe1b10821676e2cdf01e4487
 
         bytes memory babcd = bytes(abcd);
         uint k = 0;
@@ -87,7 +118,13 @@ contract Indexer{
         babcd[k++] = _v[0];
         for (uint i = 0; i < _bc.length; i++) babcd[k++] = _bc[i];
         babcd[k++] = _v[0];
+<<<<<<< HEAD
         for (uint i = 0; i < _bd.length; i++) babcd[k++] = _bd[i];      
+=======
+        for (uint i = 0; i < _bd.length; i++) babcd[k++] = _bd[i];
+        babcd[k++] = _v[0];
+        for (uint i = 0; i < _be.length; i++) babcd[k++] = _be[i];        
+>>>>>>> f7b9704d579debc7fe1b10821676e2cdf01e4487
         return string(babcd);
     }    
     

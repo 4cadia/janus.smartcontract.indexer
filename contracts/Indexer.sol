@@ -1,7 +1,7 @@
 pragma solidity >= 0.4.21 < 0.6.0;
 pragma experimental ABIEncoderV2;
 
-contract Indexer{
+contract Indexer {
 
     struct Website{
         string storageHash;
@@ -10,7 +10,7 @@ contract Indexer{
         string[] tags;
         address owner;
     }
-    
+
     Website[] private websites;
     
     mapping(string => uint) hashToIndex;
@@ -73,7 +73,7 @@ contract Indexer{
         }
 
         return result;
-    }   
+    }
 
     function concat(string memory _a, string memory _b, string memory _c) private pure returns (string memory){
         bytes memory _ba = bytes(_a);

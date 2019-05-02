@@ -12,7 +12,7 @@ contract('Indexer', function (accounts) {
     });
 
     afterEach(async () => {
-        await casino.kill({ from: owner });
+        await indexer.kill({ from: owner });
     });
 
     describe('add', function () {
@@ -38,8 +38,6 @@ contract('Indexer', function (accounts) {
                     description,
                     { from: owner }),
                 'website exists');
-
-            truffleAssert.eventNotEmitted(tx, 'addWebSiteEvent');
         });
 
         it('add a website', async () => {
@@ -60,6 +58,7 @@ contract('Indexer', function (accounts) {
     });
 
     describe('get', function () {
+
         it('get a unexisting website by tag', async () => {
 
             var tags = ['unexistingTag'];
@@ -95,7 +94,7 @@ contract('Indexer', function (accounts) {
         it('get a website by two different tags', async () => {
 
             var hashWebSite1 = 'QmWWQSuPMS6aXCbZKpEjPHPUZN2NjB3YrhJTHsV4X3vb2u';
-            var tagsWebSite1 = ['tag4'];
+            var tagsWebSite1 = ['tag4', 'tag5'];
             var titleWebSite1 = 'title4';
             var descriptionWebSite1 = 'desc4';
 
@@ -106,60 +105,17 @@ contract('Indexer', function (accounts) {
                 descriptionWebSite1,
                 { from: owner });
 
-            var websites1 = await indexer.getWebSite(tagsWebSite1);
+            var websitesTwoTags1 = await indexer.getWebSite(['tag4']);
+            var websitesTwoTags2 = await indexer.getWebSite(['tag5']);
 
-            var hashWebSite2 = 'QmWWQSuPMS6aXCbZKpEjPHPUZN2NjB3YrhJTHsV4X3vb2j';
-            var tagsWebSite2 = ['tag5'];
-            var titleWebSite2 = 'title5';
-            var descriptionWebSite2 = 'desc5';
-
-            await indexer.addWebSite(
-                hashWebSite2,
-                tagsWebSite2,
-                titleWebSite2,
-                descriptionWebSite2,
-                { from: owner });
-
-            var hashWebSite2 = 'QmWWQSuPMS6aXCbZKpEjPHPUZN2NjB3YrhJTHsV4X3vb2j';
-            var tagsWebSite2 = ['tag5'];
-            var titleWebSite2 = 'title5';
-            var descriptionWebSite2 = 'desc5';
-
-            await indexer.addWebSite(
-                hashWebSite2,
-                tagsWebSite2,
-                titleWebSite2,
-                descriptionWebSite2,
-                { from: owner });
-
-            var websitesTwoTags = await indexer.getWebSite(['tag4', 'tag5']);
-
-            assert.equal(websitesTwoTags.length, 15, 'the result must be 15 positions')
-            assert.equal(websitesTwoTags[0].split(';')[0], hashWebSite1, 'hash must be equal');
-            assert.equal(websitesTwoTags[0].split(';')[1], titleWebSite1, 'hash must be equal');
-            assert.equal(websitesTwoTags[0].split(';')[2], descriptionWebSite1, 'hash must be equal');
-            assert.equal(websitesTwoTags[1].split(';')[0], hashWebSite2, 'hash must be equal');
-            assert.equal(websitesTwoTags[1].split(';')[1], titleWebSite2, 'hash must be equal');
-            assert.equal(websitesTwoTags[1].split(';')[2], descriptionWebSite2, 'hash must be equal');
-
-            var hashWebSite3 = 'QmWWQSuPMS6aXCbZKpEjPHPUZN2NjB3YrhJTHsV4X3vb2a';
-            var tagsWebSite3 = ['tag6'];
-            var titleWebSite3 = 'title6';
-            var descriptionWebSite3 = 'desc6';
-
-            await indexer.addWebSite(
-                hashWebSite3,
-                tagsWebSite3,
-                titleWebSite3,
-                descriptionWebSite3,
-                { from: owner });
-
-            var websitesTag = await indexer.getWebSite(tagsWebSite3);
-
-            assert.equal(websitesTag.length, 15, 'the result must be 15 positions')
-            assert.equal(websitesTag[0].split(';')[0], hashWebSite3, 'hash must be equal');
-            assert.equal(websitesTag[0].split(';')[1], titleWebSite3, 'hash must be equal');
-            assert.equal(websitesTag[0].split(';')[2], descriptionWebSite3, 'hash must be equal');
+            assert.equal(websitesTwoTags1.length, 15, 'the result must be 15 positions')
+            assert.equal(websitesTwoTags1[0].split(';')[0], hashWebSite1, 'hash must be equal');
+            assert.equal(websitesTwoTags1[0].split(';')[1], titleWebSite1, 'hash must be equal');
+            assert.equal(websitesTwoTags1[0].split(';')[2], descriptionWebSite1, 'hash must be equal');
+            assert.equal(websitesTwoTags2.length, 15, 'the result must be 15 positions')
+            assert.equal(websitesTwoTags2[0].split(';')[0], hashWebSite1, 'hash must be equal');
+            assert.equal(websitesTwoTags2[0].split(';')[1], titleWebSite1, 'hash must be equal');
+            assert.equal(websitesTwoTags2[0].split(';')[2], descriptionWebSite1, 'hash must be equal');
         });
     });
 });

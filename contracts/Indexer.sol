@@ -3,6 +3,8 @@ pragma experimental ABIEncoderV2;
 
 contract Indexer {
 
+    address payable private contractOwner;
+
     struct Website{
         string storageHash;
         string title;
@@ -18,6 +20,15 @@ contract Indexer {
     mapping(string => uint[]) tagToIndex;
 
     event addWebSiteEvent(string[] _tags);
+
+    constructor () public{
+        contractOwner = msg.sender;
+    }
+
+    function kill() external {
+        require(msg.sender == contractOwner, "only the contract owner can kill this contract");
+        selfdestruct(contractOwner);
+    }
 
     function webSiteExists(string memory storageHash) public view returns(bool exist){
         if(websites.length == 0){

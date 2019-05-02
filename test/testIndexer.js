@@ -8,7 +8,11 @@ contract('Indexer', function (accounts) {
     var owner = accounts[0];
 
     beforeEach('instance for each test', async () => {
-        indexer = await Indexer.new();
+        indexer = await Indexer.new({ from: owner });
+    });
+
+    afterEach(async () => {
+        await casino.kill({ from: owner });
     });
 
     describe('add', function () {
@@ -104,8 +108,6 @@ contract('Indexer', function (accounts) {
 
             var websites1 = await indexer.getWebSite(tagsWebSite1);
 
-            console.log(websites1);
-
             var hashWebSite2 = 'QmWWQSuPMS6aXCbZKpEjPHPUZN2NjB3YrhJTHsV4X3vb2j';
             var tagsWebSite2 = ['tag5'];
             var titleWebSite2 = 'title5';
@@ -132,8 +134,6 @@ contract('Indexer', function (accounts) {
 
             var websitesTwoTags = await indexer.getWebSite(['tag4', 'tag5']);
 
-            console.log(websitesTwoTags);
-
             assert.equal(websitesTwoTags.length, 15, 'the result must be 15 positions')
             assert.equal(websitesTwoTags[0].split(';')[0], hashWebSite1, 'hash must be equal');
             assert.equal(websitesTwoTags[0].split(';')[1], titleWebSite1, 'hash must be equal');
@@ -157,9 +157,9 @@ contract('Indexer', function (accounts) {
             var websitesTag = await indexer.getWebSite(tagsWebSite3);
 
             assert.equal(websitesTag.length, 15, 'the result must be 15 positions')
-            assert.equal(websitesTag[0].split(';')[0], 'QmWWQSuPMS6aXCbZKpEjPHPUZN2NjB3YrhJTHsV4X3vb2a', 'hash must be equal');
-            assert.equal(websitesTag[0].split(';')[1], 'title3', 'hash must be equal');
-            assert.equal(websitesTag[0].split(';')[2], 'desc3', 'hash must be equal');
+            assert.equal(websitesTag[0].split(';')[0], hashWebSite3, 'hash must be equal');
+            assert.equal(websitesTag[0].split(';')[1], titleWebSite3, 'hash must be equal');
+            assert.equal(websitesTag[0].split(';')[2], descriptionWebSite3, 'hash must be equal');
         });
     });
 });

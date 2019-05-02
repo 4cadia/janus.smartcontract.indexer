@@ -7,6 +7,7 @@ contract Indexer{
         string storageHash;
         string title;
         string description;
+        string[] tags;
         address owner;
     }
     
@@ -38,6 +39,7 @@ contract Indexer{
             storageHash: _storageHash,
             title: _title,
             description: _description,
+            tags: _tags,
             owner: msg.sender
         })) -1;
 
@@ -73,7 +75,7 @@ contract Indexer{
         return result;
     }   
 
-   function concat(string memory _a, string memory _b, string memory _c) private pure returns (string memory){
+    function concat(string memory _a, string memory _b, string memory _c) private pure returns (string memory){
         bytes memory _ba = bytes(_a);
         bytes memory _bb = bytes(_b);
         bytes memory _bc = bytes(_c);
@@ -91,7 +93,7 @@ contract Indexer{
         return string(babcd);
     }    
 
-     function compare(string memory _a, string memory _b) private pure returns (int) {
+    function compare(string memory _a, string memory _b) private pure returns (int) {
         bytes memory a = bytes(_a);
         bytes memory b = bytes(_b);
         uint minLength = a.length;

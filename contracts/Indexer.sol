@@ -20,7 +20,7 @@ contract Indexer {
     mapping(string => uint[]) tagToIndex;
 
     event addWebSiteEvent(string[] _tags);
-
+    
     constructor () public{
         contractOwner = msg.sender;
     }
@@ -62,27 +62,29 @@ contract Indexer {
 
         emit addWebSiteEvent(_tags);
     }
-
+    
     function getWebSite(
-        string[] memory _tags) 
-        public 
-        view 
-        returns(string[15] memory){
-      
-        string[15] memory result;
-
-        for(uint a = 0; a < _tags.length; a++){
-
-            uint[] memory index = tagToIndex[_tags[a]];
-
-            uint k = 0;
-
-            for(uint i = 0; i < index.length; i++){
-                 result[k] = concat(websites[index[i]].storageHash, websites[index[i]].title, websites[index[i]].description); 
-                 k++;
+        string[] memory _tags,
+        uint pageNumber,
+        uint pageSize)
+        public
+        returns(string[] memory){
+        string[] memory result = new string[](pageSize);
+        uint currentItem = 0;
+        uint currentPageSize = 0;
+        for (uint tagsCount = 0; currentPageSize < pageSize && tagsCount < _tags.length; tagsCount++) {
+            uint[] memory websitesOfTag = tagToIndex[_tags[tagsCount]];
+            
+            for (uint siteIndexCount = 0; currentPageSize < pageSize && siteIndexCount < websitesOfTag.length; siteIndexCount++) {
+                 uint currentPage = currentItem / pageSize;
+                 if (currentPage == pageNumber){
+                    Website memory website = websites[websitesOfTag[siteIndexCount]];
+                    result[currentPageSize] = concat(website.storageHash, website.title, website.description);
+                    currentPageSize++;
+                 }
+                 currentItem++;
             }
         }
-
         return result;
     }
 

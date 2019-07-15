@@ -68,24 +68,26 @@ contract Indexer {
         uint pageNumber,
         uint pageSize)
         public
-        returns(string[] memory){
+        view
+        returns(string[] memory, uint){
         string[] memory result = new string[](pageSize);
         uint currentItem = 0;
         uint currentPageSize = 0;
-        for (uint tagsCount = 0; currentPageSize < pageSize && tagsCount < _tags.length; tagsCount++) {
+        for (uint tagsCount = 0; tagsCount < _tags.length; tagsCount++) {
             uint[] memory websitesOfTag = tagToIndex[_tags[tagsCount]];
-            
-            for (uint siteIndexCount = 0; currentPageSize < pageSize && siteIndexCount < websitesOfTag.length; siteIndexCount++) {
-                 uint currentPage = currentItem / pageSize;
-                 if (currentPage == pageNumber){
-                    Website memory website = websites[websitesOfTag[siteIndexCount]];
-                    result[currentPageSize] = concat(website.storageHash, website.title, website.description);
-                    currentPageSize++;
+            for (uint siteIndexCount = 0; siteIndexCount < websitesOfTag.length; siteIndexCount++) {
+                 if(currentPageSize < pageSize) {
+                    uint currentPage = currentItem / pageSize;
+                    if (currentPage + 1 == pageNumber){
+                        Website memory website = websites[websitesOfTag[siteIndexCount]];
+                        result[currentPageSize] = concat(website.storageHash, website.title, website.description);
+                        currentPageSize++;
+                    }
                  }
                  currentItem++;
             }
         }
-        return result;
+        return (result,currentItem);
     }
 
     function concat(string memory _a, string memory _b, string memory _c) private pure returns (string memory){

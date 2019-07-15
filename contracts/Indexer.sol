@@ -78,7 +78,7 @@ contract Indexer {
             for (uint siteIndexCount = 0; siteIndexCount < websitesOfTag.length; siteIndexCount++) {
                  if(currentPageSize < pageSize) {
                     uint currentPage = currentItem / pageSize;
-                    if (currentPage == pageNumber){
+                    if (currentPage + 1 == pageNumber){
                         Website memory website = websites[websitesOfTag[siteIndexCount]];
                         result[currentPageSize] = concat(website.storageHash, website.title, website.description);
                         currentPageSize++;
